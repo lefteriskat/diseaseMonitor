@@ -1,9 +1,13 @@
+//DCHashTable.cpp
+#include "DCHashTable.h"
+#include <cstring>
+#include <iostream>
 
-
+using namespace std;
 /******************** DCHashTableEntry **********************/
 DCHashTableEntry::DCHashTableEntry() {
 	key[0] = '\0';
-	records = new MyBST();
+	records = new MyBST(); 
 }
 DCHashTableEntry::DCHashTableEntry(char* key) {
 	if( key != NULL ) {
@@ -43,10 +47,15 @@ void DCHashTableEntry::printNumberOfRecords(char* date1, char* date2, char* coun
 	int numOfRecords = records->diseaseFrequency(date1, date2, country);
 	cout << key << " : " << numOfRecords << endl;
 }
+
+void DCHashTableEntry::numCurrentPatients() {
+	int currPatients = records->numCurrentPatients();
+	cout << key << " : " << currPatients << endl;
+}
 /***********************************************************/
 
 /******************* DCHashTableBucket *********************/
-DCHashTableBucket::DCHashTableBucket() { 
+DCHashTableBucket::DCHashTableBucket() {
 	maxEntries = global_BucketSize / sizeof(DCHashTableEntry);
 	if (maxEntries == 0) maxEntries = 1;
 	numOfEntries = 0;
@@ -70,36 +79,42 @@ DCHashTableEntry* DCHashTableBucket::findEntry(char* key) {
 }
 DCHashTableEntry* DCHashTableBucket::addEntry(char* key) {
 	entries[numOfEntries++].setKey(key);
-	return &entries[numOfEntries-1];
+	return &(entries[numOfEntries-1]);
 }
 bool DCHashTableBucket::isFull() {
-	return (numOfEntries == maxEntries-1);
+	return (numOfEntries == maxEntries);
 }
 void DCHashTableBucket::printNumberOfRecords(char* date1, char* date2, char* country) {
 	for( int i = 0; i < numOfEntries; i++) {
 		entries[i].printNumberOfRecords(date1, date2, country);
 	}
 }
+void DCHashTableBucket::numCurrentPatients() {
+	for( int i = 0; i < numOfEntries; i++) {
+		entries[i].numCurrentPatients();
+	}
+}
 /***********************************************************/
 
 /***************** DCHashTableBucketList *******************/
 DCHashTableBucketList::DCHashTableBucketList() {
-	firstNode = new DCHashTableBucket();
-	numOfNodes = 1;
+	firstNode = NULL;
+	numOfNodes = 0;
 }
 DCHashTableBucketList::~DCHashTableBucketList() {
-	delete firstNode;
+	if( firstNode != NULL )
+		delete firstNode;
 }
 DCHashTableEntry* DCHashTableBucketList::addEntry(char* key) {
-	DCHashTableBucket*& currNode = firstNode;
-	while ( currNode != NULL && currNode->isFull() ) {
-		currNode = currNode->next;
+	DCHashTableBucket** currNode = &firstNode;
+	while ( (*currNode) != NULL && (*currNode)->isFull() ) {
+		currNode = &((*currNode)->next);
 	}
-	if ( currNode == NULL) {
-		currNode = new DCHashTableBucket();
+	if ( (*currNode) == NULL) {
+		(*currNode) = new DCHashTableBucket();
 		numOfNodes++;
 	}
-	return currNode->addEntry(key);
+	return (*currNode)->addEntry(key);
 }
 DCHashTableEntry* DCHashTableBucketList::findEntry(char* key) {
 	DCHashTableBucket* currNode = firstNode;
@@ -108,13 +123,14 @@ DCHashTableEntry* DCHashTableBucketList::findEntry(char* key) {
 		entry = currNode->findEntry(key);
 		if( entry != NULL )
 			break;
+		currNode = currNode->next;
 	}
 	return entry;
 }
 bool DCHashTableBucketList::addRecord(char* key,
                                       PatientRecord* patientRecord) {
 	DCHashTableEntry* entry = findEntry(key);
-	if ( entry!= NULL ) {
+	if ( entry == NULL ) {
 		entry = addEntry(key);
 	}
 	return entry->addRecord(patientRecord);
@@ -135,19 +151,35 @@ void DCHashTableBucketList::printNumberOfRecords(char* key,char* date1, char* da
 		}
 	}
 }
+void DCHashTableBucketList::numCurrentPatients(char* key) {
+	if( key != NULL ) {
+		DCHashTableEntry* entry = findEntry(key);
+		if ( entry != NULL )
+			entry->numCurrentPatients();
+		else
+			cout << key << " : 0" << endl; 
+	} else {
+
+		DCHashTableBucket* currNode = firstNode;
+		while ( currNode != NULL ) {
+			currNode->numCurrentPatients();
+			currNode = currNode->next;
+		}
+	}
+}
 /***********************************************************/
 
 /***********************************************************/
 DCHashTable::DCHashTable(unsigned int numOfEntries) {
-	dcHashTable = new DCHashTableBucketList[numOfEntries];
 	this->numOfEntries = numOfEntries;
+	dcHashTable = new DCHashTableBucketList[numOfEntries];
 }
-DCHashTable::DCHashTable::~DCHashTable() {
+DCHashTable::~DCHashTable() {
 	delete [] dcHashTable;
 }
-bool DCHashTable::addRecord(char* key, patientRecord* record) {
+bool DCHashTable::addRecord(char* key, PatientRecord* record) {
 	unsigned int index = hashFunction(key);
-	dcHashTable[index].addRecord(key, record);
+	return dcHashTable[index].addRecord(key, record);
 }
 void DCHashTable::printNumberOfRecords(char* key,char* date1, char* date2, char* country) {
 	if( key != NULL ) {
@@ -155,16 +187,27 @@ void DCHashTable::printNumberOfRecords(char* key,char* date1, char* date2, char*
 	    dcHashTable[index].printNumberOfRecords(key, date1, date2, country);
 	}
 	else {
-		for( unsigned int i =0 ; i < numOfEntries; i++ ) {
-			dcHashTable[index].printNumberOfRecords(key, date1, date2, country);
+		for( unsigned int i = 0 ; i < numOfEntries; i++ ) {
+			dcHashTable[i].printNumberOfRecords(key, date1, date2, country);
 		}
 	}
 }
-unsigned int DCHashTable::hashFunction(const char* str) {
+void DCHashTable::numCurrentPatients(char* key) {
+	if( key != NULL ) {
+		unsigned int index = hashFunction(key);
+	    dcHashTable[index].numCurrentPatients(key);
+	}
+	else {
+		for( unsigned int i = 0 ; i < numOfEntries; i++ ) {
+			dcHashTable[i].numCurrentPatients(key);
+		}
+	}
+}
+unsigned int DCHashTable::hashFunction(const char* key) {
 	unsigned int hash = 1315423911;
 
-	for(size_t i = 0; i < strlen(str); i++) {
-		hash ^= ((hash << 5) + str[i] + (hash >> 2));
+	for(size_t i = 0; i < strlen(key); i++) {
+		hash ^= ((hash << 5) + key[i] + (hash >> 2));
 	}
 	return (hash & 0x7FFFFFFF) % numOfEntries;
 }

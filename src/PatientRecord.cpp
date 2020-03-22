@@ -2,6 +2,9 @@
 
 #include "PatientRecord.h"
 #include <cstring>
+#include <iostream>
+
+using namespace std;
 
 PatientRecord::PatientRecord(int recordID, char* patientsFirstName, char* patientsLastName,
 		                    char* diseaseID, char* country, char* entryDate, char* exitDate) {
@@ -27,10 +30,12 @@ if( country != NULL ) {
 
 this->entryDate = new MyDate(entryDate);
 
-if( exitDate != NULL)
+if( strlen(exitDate) >= 8) {
 	this->exitDate = new MyDate(exitDate);
-else 
+}
+else {
 	this->exitDate = NULL;
+}
 
 }
 
@@ -39,7 +44,9 @@ PatientRecord::~PatientRecord() {
 	if( exitDate != NULL )
 		delete exitDate;
 }
-
+int PatientRecord::getRecordID() {
+	return recordID;
+}
 char* PatientRecord::getPatientsFirstName() {
 	return patientsFirstName;
 }

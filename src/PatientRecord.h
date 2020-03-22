@@ -17,8 +17,9 @@ class PatientRecord
 
 public:
 	PatientRecord(int recordID, char* patientsFirstName, char* patientsLastName,
-		          char* diseaseID, char* country, char* entryDate, char* exitDate = NULL);
+		          char* diseaseID, char* country, char* entryDate, char* exitDate);
 	~PatientRecord();
+	int getRecordID();
 	char* getPatientsFirstName();
 	char* getPatientsLastName();
 	char* getDiseaseID();

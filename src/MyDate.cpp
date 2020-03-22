@@ -1,6 +1,7 @@
 //MyDate.cpp
 #include "MyDate.h"
 #include <cstring>
+#include <cstdlib>
 #include <iostream>
 
 using namespace std;
@@ -28,7 +29,7 @@ long MyDate::charDateToLong() {
 	char tmpDate[11];
 	strcpy(tmpDate, dateStr);
 	//splitting date to day month year
-	char* ddmmyy = strtok(tmpdate,"-");
+	char* ddmmyy = strtok(tmpDate,"-");
 	int i = 0;
 	while (ddmmyy != NULL){
 		switch (i){
@@ -51,17 +52,17 @@ long MyDate::charDateToLong() {
 }
 
 // overloaded < operator
-bool operator <(const MyDate& date2) {
+bool MyDate::operator <(const MyDate& date2) {
 
- if(dateNum < date2.dateNum)
+ if(dateNum <= date2.dateNum)
     return true;
 
  return false;
 }
 
 // overloaded > operator
-bool operator >(const MyDate& date2) {
- if(dateNum > date2.dateNum)
+bool MyDate::operator >(const MyDate& date2) {
+ if(dateNum >= date2.dateNum)
     return true;
 
  return false;
