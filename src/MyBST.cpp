@@ -176,7 +176,7 @@ void MyBST::topk(char* date1, char* date2, int k, int mode) {
 	for(int i = 0; i < topkArrayList->length(); i++) {
 		heap->insert(topkArrayList->get(i));
 	}
-	int i = 1;
+	int i = 0;
 	TopkArrayListNode* curr = heap->pop();
 	while( i < k && curr != NULL ){
 		cout << curr->getKey() << " " << curr->getNumOfRecords() << endl;

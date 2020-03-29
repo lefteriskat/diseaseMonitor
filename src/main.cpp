@@ -17,7 +17,7 @@ int main(int argc,char* argv[]) {
 	}
 
 	diseaseMonitor->readPatientRecordsFile();
-	diseaseMonitor->globalDiseaseStats(NULL, NULL);
+	//diseaseMonitor->globalDiseaseStats(NULL, NULL);
 
 	diseaseMonitor->readUserInput();
 

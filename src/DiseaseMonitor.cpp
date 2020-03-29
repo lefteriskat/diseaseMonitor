@@ -167,6 +167,7 @@ void DiseaseMonitor::readUserInput() {
 		}
 
 		if( !strcmp(arguments[0], "/exit")) {
+			exit();
 			break;
 		} 
 		else if ( !strcmp(arguments[0], "/globalDiseaseStats") ) {
@@ -186,9 +187,12 @@ void DiseaseMonitor::readUserInput() {
 				cout << "error" << endl;
 		} 
 		else if ( !strcmp(arguments[0], "/insertPatientRecord") ) {
-			if( numOfArguments >= 7 )
-				insertPatientRecord(atoi(arguments[1]), arguments[2], arguments[3],
+			if( numOfArguments >= 7 ){
+				bool inserted = insertPatientRecord(atoi(arguments[1]), arguments[2], arguments[3],
 									arguments[4], arguments[5],arguments[6], arguments[7]);
+				if( inserted )
+					cout << "Record added" << endl;
+			}
 			else
 				cout << "error" << endl;
 
@@ -209,17 +213,17 @@ void DiseaseMonitor::readUserInput() {
 		}
 		else if ( !strcmp(arguments[0], "/topk-Diseases") ) {
 			if( numOfArguments == 3 )
-				topkDiseases(arguments[1],atoi(arguments[2]), NULL , NULL );
+				topkDiseases(arguments[2],atoi(arguments[1]), NULL , NULL );
 			else if ( numOfArguments == 5 )
-				topkDiseases(arguments[1],atoi(arguments[2]), arguments[3] , arguments[4] );
+				topkDiseases(arguments[2],atoi(arguments[1]), arguments[3] , arguments[4] );
 			else
 				cout << "error" << endl;
 		}
 		else if ( !strcmp(arguments[0], "/topk-Countries") ) {
 			if( numOfArguments == 3 )
-				topkCountries(arguments[1],atoi(arguments[2]), NULL , NULL );
+				topkCountries(arguments[2],atoi(arguments[1]), NULL , NULL );
 			else if ( numOfArguments == 5 )
-				topkCountries(arguments[1],atoi(arguments[2]), arguments[3] , arguments[4] );
+				topkCountries(arguments[2],atoi(arguments[1]), arguments[3] , arguments[4] );
 			else
 				cout << "error" << endl;
 		}
@@ -287,7 +291,7 @@ void DiseaseMonitor::diseaseFrequency(char* virusName, char* country, char* date
 }
 
 void DiseaseMonitor::exit() {
-
+	cout << "exiting" << endl;
 }
 
 void DiseaseMonitor::topkDiseases(char* country, int k, char* date1, char* date2) {
