@@ -23,6 +23,7 @@ public:
     void printNumberOfRecords(char* date1, char* date2, char* country);
     void numCurrentPatients();
     bool recordPatientExit(int recordID, char* exitDate);
+    void topk(char* date1, char* date2, int k, int mode);
 };
 
 class DCHashTableBucket {
@@ -57,6 +58,7 @@ public:
 	void printNumberOfRecords(char* key,char* date1, char* date2, char* country);
 	void numCurrentPatients(char* key);
 	bool recordPatientExit(int recordID, char* exitDate);
+	void topk(char* key, char* date1, char* date2, int k, int mode);
 };
 
 class DCHashTable {
@@ -71,6 +73,7 @@ public:
 	void printNumberOfRecords(char* key,char* date1, char* date2, char* country);
 	void numCurrentPatients(char* key);
 	bool recordPatientExit(int recordID, char* exitDate);
+	void topk(char* key, char* date1, char* date2, int k, int mode);
 	unsigned int hashFunction(const char* key);
 };
 

@@ -55,6 +55,9 @@ void DCHashTableEntry::numCurrentPatients() {
 bool DCHashTableEntry::recordPatientExit(int recordID, char* exitDate) {
 	bool success = records->recordPatientExit(recordID, exitDate);
 }
+void DCHashTableEntry::topk(char* date1, char* date2, int k, int mode) { 
+	records->topk(date1, date2, k, mode);
+}
 /***********************************************************/
 
 /******************* DCHashTableBucket *********************/
@@ -186,6 +189,13 @@ bool DCHashTableBucketList::recordPatientExit(int recordID, char* exitDate) {
 	}
 	return false;
 }
+void DCHashTableBucketList::topk(char* key, char* date1, char* date2, int k, int mode) { 
+	DCHashTableEntry* entry = findEntry(key);
+	if ( entry != NULL )
+		entry->topk(date1, date2, k, mode);
+	else
+		cout << "error" << endl; 
+}
 /***********************************************************/
 
 /***********************************************************/
@@ -240,6 +250,13 @@ unsigned int DCHashTable::hashFunction(const char* key) {
 		hash ^= ((hash << 5) + key[i] + (hash >> 2));
 	}
 	return (hash & 0x7FFFFFFF) % numOfEntries;
+}
+
+//mode = 1 topkDiseases k country
+//mode = 2 topkCountries k disease
+void DCHashTable::topk(char* key, char* date1, char* date2, int k, int mode) { 
+	unsigned int index = hashFunction(key);
+    dcHashTable[index].topk(key, date1, date2, k, mode);
 }
 
 /***********************************************************/

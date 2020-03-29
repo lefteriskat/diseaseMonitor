@@ -48,6 +48,7 @@ void TopkArrayList::insert(char* key) {
 		}
 
 		topkArrayList[numOfNodes].setKey(key);
+		topkArrayList[numOfNodes].numOfRecords = 0;
 		topkArrayList[numOfNodes].increaseNumOfRecords();
 		numOfNodes++;
 	}

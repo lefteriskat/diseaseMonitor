@@ -35,6 +35,8 @@ public:
 	void numCurrentPatients( char* disease);
 	void globalDiseaseStats(char* date1, char* date2);
 	void diseaseFrequency(char* virusName, char* country, char* date1, char* date2);
+	void topkDiseases(char* country, int k, char* date1, char* date2);
+	void topkCountries(char* disease, int k, char* date1, char* date2);
 	void exit();
 
 

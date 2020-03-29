@@ -206,7 +206,23 @@ void DiseaseMonitor::readUserInput() {
 				numCurrentPatients(arguments[1]);
 			else
 				cout << "error" << endl;
-		} 
+		}
+		else if ( !strcmp(arguments[0], "/topk-Diseases") ) {
+			if( numOfArguments == 3 )
+				topkDiseases(arguments[1],atoi(arguments[2]), NULL , NULL );
+			else if ( numOfArguments == 5 )
+				topkDiseases(arguments[1],atoi(arguments[2]), arguments[3] , arguments[4] );
+			else
+				cout << "error" << endl;
+		}
+		else if ( !strcmp(arguments[0], "/topk-Countries") ) {
+			if( numOfArguments == 3 )
+				topkCountries(arguments[1],atoi(arguments[2]), NULL , NULL );
+			else if ( numOfArguments == 5 )
+				topkCountries(arguments[1],atoi(arguments[2]), arguments[3] , arguments[4] );
+			else
+				cout << "error" << endl;
+		}
 		else {
 			cout << "error" << endl;
 		}
@@ -272,4 +288,11 @@ void DiseaseMonitor::diseaseFrequency(char* virusName, char* country, char* date
 
 void DiseaseMonitor::exit() {
 
+}
+
+void DiseaseMonitor::topkDiseases(char* country, int k, char* date1, char* date2) {
+	countryHashTable->topk(country, date1, date2, k, 1);
+}
+void DiseaseMonitor::topkCountries(char* disease, int k, char* date1, char* date2) {
+	diseaseHashTable->topk(disease, date1, date2, k, 2);
 }

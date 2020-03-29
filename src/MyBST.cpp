@@ -1,5 +1,6 @@
 //MyBST.cpp
 #include "myBST.h"
+#include "TopkMaxHeap.h"
 #include <cstring>
 #include <iostream>
 
@@ -161,5 +162,47 @@ PatientRecord* MyBST::recursiveFindRecord(int recordID, MyBSTNode* currNode) {
 		return recursiveFindRecord(recordID, currNode->right);
 	}
 }
+void MyBST::topk(char* date1, char* date2, int k, int mode) {
+	TopkArrayList* topkArrayList = new TopkArrayList();
+	if( date1 != NULL && date2 != NULL ){
+		MyDate mydate1 = MyDate(date1);
+		MyDate mydate2 = MyDate(date2);
+		topkTraverse(root, topkArrayList, &mydate1, &mydate2, mode);
+	}
+	else {
+		topkTraverse(root, topkArrayList, NULL, NULL, mode);
+	}
+	TopkMaxHeap* heap = new TopkMaxHeap();
+	for(int i = 0; i < topkArrayList->length(); i++) {
+		heap->insert(topkArrayList->get(i));
+	}
+	int i = 1;
+	TopkArrayListNode* curr = heap->pop();
+	while( i < k && curr != NULL ){
+		cout << curr->getKey() << " " << curr->getNumOfRecords() << endl;
+		i++;
+		curr = heap->pop();
+	}
 
+	delete heap;
+	delete topkArrayList;
+}
+void MyBST::topkTraverse(MyBSTNode* currNode,TopkArrayList* topkArrayList, MyDate* date1, MyDate* date2, int mode) {
+	if(currNode == NULL ) {
+		return ;
+	}
+	bool check1 = date1 == NULL || (*(currNode->record->getEntryDate())) >= *date1;
+	bool check2 = date2 == NULL || (*(currNode->record->getEntryDate())) <= *date2;
+	if( check1 ) //there is no need to check the left subtree if entryDate < date1
+		topkTraverse(currNode->left, topkArrayList, date1, date2, mode);
+	if( check2 ) //there is no need to check the left subtree if entryDate > date2
+		topkTraverse(currNode->right, topkArrayList, date1, date2, mode);
+
+
+	if( check1 && check2 ) {
+		topkArrayList->insert((mode == 1)?currNode->record->getDiseaseID():currNode->record->getCountry());
+	}
+	
+	return;
+}
 /***********************************************************/

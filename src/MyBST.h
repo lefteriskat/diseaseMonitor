@@ -4,6 +4,7 @@
 
 #include "PatientRecord.h"
 #include "MyDate.h"
+#include "TopkArrayList.h"
 
 extern bool global_DataDeleted;
 class MyBSTNode {
@@ -35,6 +36,8 @@ public:
 	int traverse(MyBSTNode* currNode, MyDate& date1, MyDate& date2, char* country);
 	int numCurrentPatients();
 	bool recordPatientExit(int recordID, char* exitDate);
+	void topk(char* date1, char* date2, int k, int mode);
+	void topkTraverse(MyBSTNode* currNode,TopkArrayList* topkArrayList, MyDate* date1, MyDate* date2, int mode);
 };
 
 #endif

@@ -21,8 +21,10 @@ TopkMaxHeap::TopkMaxHeap() {
 	root = NULL;
 }
 TopkMaxHeap::~TopkMaxHeap() {
-	if( root != NULL )
-		delete root;
+	TopkArrayListNode* x = pop();
+	while( x != NULL ){
+		x = pop();
+	}
 }
 void TopkMaxHeap::insert(TopkArrayListNode* data) {
 	if( root == NULL ) {
@@ -39,12 +41,6 @@ void TopkMaxHeap::insert(TopkArrayListNode* data) {
 		lastNode = *newNode;
 		
 		while( lastNode->parent && lastNode->data->getNumOfRecords() > lastNode->parent->data->getNumOfRecords()) {
-			cout << "Swapping " << lastNode->data->getNumOfRecords() << " " << lastNode->parent->data->getNumOfRecords() << endl;
-			if( lastNode->parent){
-				if(lastNode->parent->left)
-					cout << "parent->left" <<  lastNode->parent->left->data->getNumOfRecords() <<endl;
-
-			}
 			swap(lastNode->parent, lastNode);
 		}
 	}
