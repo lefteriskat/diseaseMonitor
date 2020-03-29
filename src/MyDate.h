@@ -15,6 +15,8 @@ public:
 	long  getDateNum();
 	bool operator <(const MyDate& date2);
 	bool operator >(const MyDate& date2);
+	bool operator <=(const MyDate& date2);
+	bool operator >=(const MyDate& date2);
 };
 
 #endif

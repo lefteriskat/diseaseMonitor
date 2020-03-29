@@ -23,6 +23,8 @@ class MyBST{
 	int numOfRecords;
 	bool recursiveFindRecord(PatientRecord* record, MyBSTNode* currNode);
 	void recursiveAddRecord(PatientRecord* record, MyBSTNode** currNode);
+	int recursiveNumCurrentPatients(MyBSTNode* currNode);
+	PatientRecord* recursiveFindRecord(int recordID, MyBSTNode* currNode);
 public:
 	MyBST();
 	~MyBST();
@@ -32,7 +34,7 @@ public:
 	int diseaseFrequency(char* date1, char* date2, char* country);
 	int traverse(MyBSTNode* currNode, MyDate& date1, MyDate& date2, char* country);
 	int numCurrentPatients();
-	int recursiveNumCurrentPatients(MyBSTNode* currNode);
+	bool recordPatientExit(int recordID, char* exitDate);
 };
 
 #endif

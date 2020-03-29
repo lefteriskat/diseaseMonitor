@@ -52,7 +52,7 @@ void MyBST::recursiveAddRecord(PatientRecord* record, MyBSTNode** currNode) {
 		return;
 	}
 
-	if( (*(record->getEntryDate())) < (*((*currNode)->record->getEntryDate())) ) {
+	if( (*(record->getEntryDate())) <= (*((*currNode)->record->getEntryDate())) ) {
 		recursiveAddRecord(record, &((*currNode)->left));
 	} else {
 		recursiveAddRecord(record, &((*currNode)->right));
@@ -68,7 +68,7 @@ bool MyBST::recursiveFindRecord(PatientRecord* record, MyBSTNode* currNode) {
 		return true;
 	}
 
-	if( (*(record->getEntryDate())) < (*(currNode->record->getEntryDate())) ) {
+	if( (*(record->getEntryDate())) <= (*(currNode->record->getEntryDate())) ) {
 		return recursiveFindRecord(record, currNode->left);
 	} else {
 		return recursiveFindRecord(record, currNode->right);
@@ -102,8 +102,8 @@ int MyBST::traverse(MyBSTNode* currNode, MyDate& date1, MyDate& date2, char* cou
 		return 0;
 	}
 	int result = 0;
-	bool check1 = (*(currNode->record->getEntryDate())) > date1;
-	bool check2 = (*(currNode->record->getEntryDate())) < date2;
+	bool check1 = (*(currNode->record->getEntryDate())) >= date1;
+	bool check2 = (*(currNode->record->getEntryDate())) <= date2;
 	if( check1 ) //there is no need to check the left subtree if entryDate < date1
 		result += traverse(currNode->left, date1, date2, country);
 	if( check2 ) //there is no need to check the left subtree if entryDate > date2
@@ -135,6 +135,31 @@ int MyBST::recursiveNumCurrentPatients(MyBSTNode* currNode) {
 }
 int MyBST::numCurrentPatients() {
 	return recursiveNumCurrentPatients(root);
+}
+bool MyBST::recordPatientExit(int recordID, char* exitDate) {
+	PatientRecord* target = recursiveFindRecord(recordID, root);
+	if ( target != NULL ) {
+		target->setExitDate(exitDate);
+		return true;
+	}
+	return false;
+}
+PatientRecord* MyBST::recursiveFindRecord(int recordID, MyBSTNode* currNode) {
+	if(currNode == NULL ) {
+		return NULL;
+	}
+
+	if(currNode->record->getRecordID() == recordID) {
+		return currNode->record;
+	}
+
+	PatientRecord* target = recursiveFindRecord(recordID, currNode->left);
+	if (target != NULL ) {
+		return target;
+	}
+	else {
+		return recursiveFindRecord(recordID, currNode->right);
+	}
 }
 
 /***********************************************************/

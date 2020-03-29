@@ -37,10 +37,10 @@ long MyDate::charDateToLong() {
 				sum += atoi(ddmmyy) * 1L; //day
 				break;
 			case 1:
-				sum += atoi(ddmmyy) * 100L; //month
+				sum += atoi(ddmmyy) * 1000L; //month
 				break;
 			case 2:
-				sum += atoi(ddmmyy) * 1000L; //year
+				sum += atoi(ddmmyy) * 1000000L; //year
 				break;
 			default: 
 				cout << "Error on reading date" << endl;
@@ -51,8 +51,22 @@ long MyDate::charDateToLong() {
 	return sum;
 }
 
-// overloaded < operator
 bool MyDate::operator <(const MyDate& date2) {
+
+ if(dateNum < date2.dateNum)
+    return true;
+
+ return false;
+}
+
+bool MyDate::operator >(const MyDate& date2) {
+ if(dateNum > date2.dateNum)
+    return true;
+
+ return false;
+}
+
+bool MyDate::operator <=(const MyDate& date2) {
 
  if(dateNum <= date2.dateNum)
     return true;
@@ -60,8 +74,8 @@ bool MyDate::operator <(const MyDate& date2) {
  return false;
 }
 
-// overloaded > operator
-bool MyDate::operator >(const MyDate& date2) {
+bool MyDate::operator >=(const MyDate& date2) {
+
  if(dateNum >= date2.dateNum)
     return true;
 

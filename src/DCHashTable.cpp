@@ -45,12 +45,15 @@ bool DCHashTableEntry::addRecord(PatientRecord* patientRecord) {
 }
 void DCHashTableEntry::printNumberOfRecords(char* date1, char* date2, char* country) {
 	int numOfRecords = records->diseaseFrequency(date1, date2, country);
-	cout << key << " : " << numOfRecords << endl;
+	cout << key << " " << numOfRecords << endl;
 }
 
 void DCHashTableEntry::numCurrentPatients() {
 	int currPatients = records->numCurrentPatients();
-	cout << key << " : " << currPatients << endl;
+	cout << key << " " << currPatients << endl;
+}
+bool DCHashTableEntry::recordPatientExit(int recordID, char* exitDate) {
+	bool success = records->recordPatientExit(recordID, exitDate);
 }
 /***********************************************************/
 
@@ -93,6 +96,13 @@ void DCHashTableBucket::numCurrentPatients() {
 	for( int i = 0; i < numOfEntries; i++) {
 		entries[i].numCurrentPatients();
 	}
+}
+bool DCHashTableBucket::recordPatientExit(int recordID, char* exitDate) {
+	for( int i = 0; i < numOfEntries; i++) {
+		if (entries[i].recordPatientExit(recordID, exitDate))
+			return true;
+	}
+	return false;
 }
 /***********************************************************/
 
@@ -141,7 +151,7 @@ void DCHashTableBucketList::printNumberOfRecords(char* key,char* date1, char* da
 		if ( entry != NULL )
 			entry->printNumberOfRecords(date1, date2, country);
 		else
-			cout << key << " : 0" << endl; 
+			cout << key << " 0" << endl; 
 	} else {
 
 		DCHashTableBucket* currNode = firstNode;
@@ -157,7 +167,7 @@ void DCHashTableBucketList::numCurrentPatients(char* key) {
 		if ( entry != NULL )
 			entry->numCurrentPatients();
 		else
-			cout << key << " : 0" << endl; 
+			cout << key << " 0" << endl; 
 	} else {
 
 		DCHashTableBucket* currNode = firstNode;
@@ -166,6 +176,15 @@ void DCHashTableBucketList::numCurrentPatients(char* key) {
 			currNode = currNode->next;
 		}
 	}
+}
+bool DCHashTableBucketList::recordPatientExit(int recordID, char* exitDate) {
+	DCHashTableBucket* currNode = firstNode;
+	while ( currNode != NULL ) {
+		if (currNode->recordPatientExit(recordID, exitDate))
+			return true;
+		currNode = currNode->next;
+	}
+	return false;
 }
 /***********************************************************/
 
@@ -203,6 +222,17 @@ void DCHashTable::numCurrentPatients(char* key) {
 		}
 	}
 }
+
+bool DCHashTable::recordPatientExit(int recordID, char* exitDate) {
+	for( unsigned int i = 0 ; i < numOfEntries; i++ ) {
+		if (dcHashTable[i].recordPatientExit(recordID, exitDate))
+			return true;
+	}
+	//cout << "No record with recordID = " << recordID << "." <<endl;
+	cout << "error" << endl;
+	return false;
+}
+
 unsigned int DCHashTable::hashFunction(const char* key) {
 	unsigned int hash = 1315423911;
 

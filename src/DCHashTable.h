@@ -22,6 +22,7 @@ public:
     bool addRecord(PatientRecord* patientRecord);
     void printNumberOfRecords(char* date1, char* date2, char* country);
     void numCurrentPatients();
+    bool recordPatientExit(int recordID, char* exitDate);
 };
 
 class DCHashTableBucket {
@@ -39,6 +40,7 @@ public:
 	bool isFull();
 	void printNumberOfRecords(char* date1, char* date2, char* country);
 	void numCurrentPatients();
+	bool recordPatientExit(int recordID, char* exitDate);
 
 	friend class DCHashTableBucketList;
 };
@@ -54,6 +56,7 @@ public:
 	bool addRecord(char* key, PatientRecord* patientRecord);
 	void printNumberOfRecords(char* key,char* date1, char* date2, char* country);
 	void numCurrentPatients(char* key);
+	bool recordPatientExit(int recordID, char* exitDate);
 };
 
 class DCHashTable {
@@ -67,6 +70,7 @@ public:
 	void addEntry(char* key);
 	void printNumberOfRecords(char* key,char* date1, char* date2, char* country);
 	void numCurrentPatients(char* key);
+	bool recordPatientExit(int recordID, char* exitDate);
 	unsigned int hashFunction(const char* key);
 };
 

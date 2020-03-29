@@ -65,3 +65,18 @@ MyDate* PatientRecord::getEntryDate() {
 MyDate* PatientRecord::getExitDate() {
 	return exitDate;
 }
+bool PatientRecord::setExitDate(char* exitDate) {
+	if( (this->exitDate == NULL) && strlen(exitDate) >= 8) {
+		this->exitDate = new MyDate(exitDate);
+		cout << "Record updated" << endl;
+		return true;
+	}
+	else {
+		if (this->exitDate) {
+			cout << "This record has already an Exit Date." << endl;
+		} else {
+			cout << "error" << endl;
+		}
+		return false;
+	}
+}

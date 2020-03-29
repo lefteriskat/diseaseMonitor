@@ -1,7 +1,8 @@
 //main.cpp
 #include <iostream>
 #include "DiseaseMonitor.h"
-
+#include "TopkArrayList.h"
+#include "TopkMaxHeap.h"
 
 using namespace std;
 

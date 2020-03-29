@@ -26,6 +26,7 @@ public:
 	char* getCountry();
 	MyDate* getEntryDate();
 	MyDate* getExitDate();
+	bool setExitDate(char* exitDate);
 };
 
 #endif

@@ -175,27 +175,29 @@ void DiseaseMonitor::readUserInput() {
 			else if( numOfArguments == 1 )
 				globalDiseaseStats(NULL, NULL);
 			else 
-				cout << "Wrong number of arguments" << endl;
+				cout << "error" << endl;
 		} 
 		else if ( !strcmp(arguments[0], "/diseaseFrequency") ) {
 			if( numOfArguments == 4)
 				diseaseFrequency( arguments[1], NULL, arguments[2], arguments[3]);
 			else if ( numOfArguments == 5 )
-				diseaseFrequency( arguments[1], arguments[2], arguments[3], arguments[4]);
-
+				diseaseFrequency( arguments[1], arguments[4], arguments[2], arguments[3]);
 			else
-				cout << "Wrong number of arguments" << endl;
+				cout << "error" << endl;
 		} 
 		else if ( !strcmp(arguments[0], "/insertPatientRecord") ) {
 			if( numOfArguments >= 7 )
 				insertPatientRecord(atoi(arguments[1]), arguments[2], arguments[3],
 									arguments[4], arguments[5],arguments[6], arguments[7]);
 			else
-				cout << "Wrong number of arguments" << endl;
+				cout << "error" << endl;
 
 		} 
 		else if ( !strcmp(arguments[0], "/recordPatientExit") ) {
-
+			if( numOfArguments == 3 )
+				recordPatientExit(atoi(arguments[1]), arguments[2]);
+			else
+				cout << "error" << endl;
 		} 
 		else if ( !strcmp(arguments[0], "/numCurrentPatients") ) {
 			if( numOfArguments == 1 )
@@ -203,10 +205,10 @@ void DiseaseMonitor::readUserInput() {
 			else if (numOfArguments == 2 )
 				numCurrentPatients(arguments[1]);
 			else
-				cout << "Wrong number of arguments" << endl;
+				cout << "error" << endl;
 		} 
 		else {
-			cout << "Not Supported Operation" << endl;
+			cout << "error" << endl;
 		}
 	}
 
@@ -217,14 +219,14 @@ void DiseaseMonitor::readUserInput() {
 }
 
 bool DiseaseMonitor::insertPatientRecord(PatientRecord* patientRecord) {
-	cout << "Inserting " << patientRecord->getRecordID ()<< " into diseaseHashTable [" << patientRecord->getDiseaseID() << "]" << endl;
+	//cout << "Inserting " << patientRecord->getRecordID ()<< " into diseaseHashTable [" << patientRecord->getDiseaseID() << "]" << endl;
 	bool noDuplicate = diseaseHashTable->addRecord(patientRecord->getDiseaseID(), patientRecord);
 	if( noDuplicate ){
-		cout << "Inserting " << patientRecord->getRecordID ()<< " into countryHashTable [" << patientRecord->getCountry() << "]" << endl;
+		//cout << "Inserting " << patientRecord->getRecordID ()<< " into countryHashTable [" << patientRecord->getCountry() << "]" << endl;
 		return countryHashTable->addRecord(patientRecord->getCountry(), patientRecord);
 	}
 	else {
-		cout << "FOUND" << endl;
+		cout << "error" << endl;
 		return false;		   
 	}
 }
@@ -236,13 +238,15 @@ bool DiseaseMonitor::insertPatientRecord(int recordID, char* patientsFirstName, 
 		                                          diseaseID, country, entryDate, exitDate);
 	//check for entryDate > exitDate
 	if( tempRecord->getExitDate() && *(tempRecord->getEntryDate()) > *(tempRecord->getExitDate()) ) {
+		cout << tempRecord->getEntryDate()->getDateStr() << " " << tempRecord->getEntryDate()->getDateNum() << endl;
+		cout << tempRecord->getExitDate()->getDateStr() << " " << tempRecord->getExitDate()->getDateNum() << endl;
 		delete tempRecord;
-		cerr << "Entry Date > Exit Date" << endl;
-		return false;
+		cerr << "error" << endl;
+		return true;
 	}
 
 	if( !insertPatientRecord(tempRecord) ) {
-		cerr << "Duplicate record, Exiting ..." << endl;
+		cerr << "error" << endl;
 		delete tempRecord;
 		return false;
 	}
@@ -251,7 +255,7 @@ bool DiseaseMonitor::insertPatientRecord(int recordID, char* patientsFirstName, 
 }
 
 void DiseaseMonitor::recordPatientExit(int recordID, char* exitDate) {
-
+	diseaseHashTable->recordPatientExit(recordID, exitDate);
 }
 
 void DiseaseMonitor::numCurrentPatients( char* disease ) {
