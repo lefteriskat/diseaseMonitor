@@ -53,7 +53,7 @@ void DCHashTableEntry::numCurrentPatients() {
 	cout << key << " " << currPatients << endl;
 }
 bool DCHashTableEntry::recordPatientExit(int recordID, char* exitDate) {
-	bool success = records->recordPatientExit(recordID, exitDate);
+	return records->recordPatientExit(recordID, exitDate);
 }
 void DCHashTableEntry::topk(char* date1, char* date2, int k, int mode) { 
 	records->topk(date1, date2, k, mode);
@@ -62,7 +62,7 @@ void DCHashTableEntry::topk(char* date1, char* date2, int k, int mode) {
 
 /******************* DCHashTableBucket *********************/
 DCHashTableBucket::DCHashTableBucket() {
-	maxEntries = global_BucketSize / sizeof(DCHashTableEntry);
+	maxEntries = global_BucketSize / (int)sizeof(DCHashTableEntry);
 	if (maxEntries == 0) maxEntries = 1;
 	numOfEntries = 0;
 	next = NULL;

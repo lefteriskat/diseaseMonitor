@@ -25,13 +25,11 @@ DiseaseMonitor::DiseaseMonitor() {
 }
 
 DiseaseMonitor::~DiseaseMonitor() {
-	cout << "Deleting DiseaseMonitor1!" << endl;
 	if( diseaseHashTable != NULL )
 		delete diseaseHashTable;
 	global_DataDeleted = true;
 	if( countryHashTable != NULL )
 		delete countryHashTable;
-	cout << "Deleting DiseaseMonitor2!" << endl;
 }
 
 bool DiseaseMonitor::readArguments(int argc, char* argv[]) {
@@ -124,7 +122,8 @@ bool DiseaseMonitor::readPatientRecordsFile() {
 void DiseaseMonitor::splitInput(char* input, char** arguments,int& numOfArguments) {
 	int j=0; 
 	numOfArguments = 0;
-    for(int i=0; i <= (strlen(input)) && numOfArguments < MAX_NUMBER_OF_ARGUMENTS ; i++)
+	int length = (int) strlen(input);
+    for(int i=0; i <= length && numOfArguments < MAX_NUMBER_OF_ARGUMENTS ; i++)
     {
         // if space or NULL found, assign NULL into splitStrings[count]
         if(input[i] == ' ' || input[i] == '\0' || input[i] == '\n')
